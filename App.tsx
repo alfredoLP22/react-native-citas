@@ -30,7 +30,7 @@ function App(): JSX.Element {
         style={styles.btnNewAppointment}>
         <Text style={styles.btnTextNewAppointment}>Nueva cita</Text>
       </Pressable>
-      <Form isVisible={isVisible}/>
+      <Form isVisible={isVisible} setIsVisible={setIsVisible}/>
     </SafeAreaView>
   );
 }

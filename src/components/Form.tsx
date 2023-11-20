@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {ChangeEvent, useState} from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import {
   Modal,
   SafeAreaView,
@@ -9,11 +9,12 @@ import {
   View,
   ScrollView,
   Button,
+  Pressable,
 } from 'react-native';
 
 import DatePicker from 'react-native-date-picker';
 
-const Form = ({isVisible}: {isVisible: boolean}) => {
+const Form = ({ isVisible, setIsVisible }: { isVisible: boolean, setIsVisible: any }) => {
   const [patient, setPatient] = useState('');
   const [owner, setOwner] = useState('');
   const [email, setEmail] = useState('');
@@ -29,6 +30,10 @@ const Form = ({isVisible}: {isVisible: boolean}) => {
           <Text style={styles.title}>
             Nueva <Text style={styles.titleBold}>cita</Text>
           </Text>
+
+          <Pressable style={styles.btnCancel} onLongPress={() => setIsVisible(!isVisible)}>
+            <Text style={styles.btnCancelText}>X cancelar</Text>
+          </Pressable>
 
           <View style={styles.field}>
             <Text style={styles.label}>Nombre paciente</Text>
@@ -144,6 +149,22 @@ const styles = StyleSheet.create({
   dateContainer: {
     backgroundColor: '#FFF',
     borderRadius: 10,
+  },
+  btnCancel: {
+    marginVertical: 30,
+    backgroundColor: '#5827A4',
+    marginHorizontal: 30,
+    padding: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#FFF'
+  },
+  btnCancelText: {
+    color: '#FFF',
+    textAlign: 'center',
+    fontWeight: '900',
+    fontSize: 20,
+    textTransform: 'uppercase',
   }
 });
 
