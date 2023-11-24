@@ -10,11 +10,12 @@ import {
   ScrollView,
   Button,
   Pressable,
+  Alert
 } from 'react-native';
 
 import DatePicker from 'react-native-date-picker';
 
-const Form = ({ isVisible, setIsVisible }: { isVisible: boolean, setIsVisible: any }) => {
+const Form = ({ isVisible, setIsVisible, setPatients, patients }: { isVisible: boolean, setIsVisible: any, setPatients: any, patients: any }) => {
   const [patient, setPatient] = useState('');
   const [owner, setOwner] = useState('');
   const [email, setEmail] = useState('');
@@ -22,6 +23,32 @@ const Form = ({ isVisible, setIsVisible }: { isVisible: boolean, setIsVisible: a
   const [date, setDate] = useState(new Date());
   const [symptoms, setSymptoms] = useState('');
   const [open, setOpen] = useState(false);
+
+  const handleNewAppointment = (e: any) => {
+    if ([patient, owner, email, date, symptoms].includes('')) {
+      // [{ text: 'Cancelar'}, {text: 'Ok'} ]
+      Alert.alert('Error', 'Todos los campos son obligatorios')
+      return;
+    }
+
+    const newPatient = {
+      id: Date.now(),
+      patient,
+      owner,
+      email,
+      cellphone,
+      date,
+      symptoms
+    }
+    setPatients([...patients, newPatient]);
+    setIsVisible(!isVisible);
+    setPatient('');
+    setOwner('');
+    setEmail('');
+    setCellphone('');
+    setDate(new Date());
+    setSymptoms('');
+  }
 
   return (
     <Modal visible={isVisible} animationType="slide">
@@ -31,7 +58,7 @@ const Form = ({ isVisible, setIsVisible }: { isVisible: boolean, setIsVisible: a
             Nueva <Text style={styles.titleBold}>cita</Text>
           </Text>
 
-          <Pressable style={styles.btnCancel} onLongPress={() => setIsVisible(!isVisible)}>
+          <Pressable style={styles.btnCancel} onPress={() => setIsVisible(!isVisible)}>
             <Text style={styles.btnCancelText}>X cancelar</Text>
           </Pressable>
 
@@ -106,6 +133,9 @@ const Form = ({ isVisible, setIsVisible }: { isVisible: boolean, setIsVisible: a
               numberOfLines={4}
             />
           </View>
+          <Pressable style={styles.btnNewAppointment} onPress={handleNewAppointment} >
+            <Text style={styles.btnNewAppointmentText}>Agregar paciente</Text>
+          </Pressable>
         </ScrollView>
       </SafeAreaView>
     </Modal>
@@ -165,7 +195,21 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     fontSize: 20,
     textTransform: 'uppercase',
-  }
+  },
+  btnNewAppointment: {
+    marginVertical: 50,
+    backgroundColor: '#F59E0B',
+    paddingVertical: 15,
+    marginHorizontal: 30,
+    borderRadius: 10,
+  },
+  btnNewAppointmentText: {
+    color: '#5827A4',
+    textAlign: 'center',
+    fontWeight: '900',
+    fontSize: 20,
+    textTransform: 'uppercase',
+  },
 });
 
 export default Form;

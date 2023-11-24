@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   View,
@@ -7,12 +7,14 @@ import {
   Button,
   Pressable,
   Modal,
+  FlatList
 } from 'react-native';
 import Form from './src/components/Form';
+import Patient from './src/components/Patient';
 
 function App(): JSX.Element {
   const [isVisible, setIsVisible] = useState(false);
-  const [clients, setClients] = useState([]);
+  const [patients, setPatients] = useState([]);
 
   const addAppointment = () => {
     console.log('diste click');
@@ -30,7 +32,19 @@ function App(): JSX.Element {
         style={styles.btnNewAppointment}>
         <Text style={styles.btnTextNewAppointment}>Nueva cita</Text>
       </Pressable>
-      <Form isVisible={isVisible} setIsVisible={setIsVisible}/>
+
+      {patients.length === 0 ?
+        <Text style={styles.noPatients}>No hay pacientes aun</Text> :
+        <FlatList
+        style={styles.list}
+          data={patients}
+          keyExtractor={(item: any) => item.id}
+          renderItem={({ item }) => {
+            return (
+              <Patient item={item}/>
+            )
+          }} />}
+      <Form isVisible={isVisible} setIsVisible={setIsVisible} setPatients={setPatients} patients={patients} />
     </SafeAreaView>
   );
 }
@@ -65,6 +79,16 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     textTransform: 'uppercase',
   },
+  noPatients: {
+    marginTop: 40,
+    textAlign: 'center',
+    fontSize: 24,
+    fontWeight: '600',
+  },
+  list: {
+    marginTop: 50,
+    marginHorizontal: 30
+  }
 });
 
 export default App;
