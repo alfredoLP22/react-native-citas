@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { ChangeEvent, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Modal,
   SafeAreaView,
@@ -8,26 +8,34 @@ import {
   TextInput,
   View,
   ScrollView,
-  Button,
   Pressable,
-  Alert
+  Alert,
 } from 'react-native';
 
 import DatePicker from 'react-native-date-picker';
 
-const Form = ({ isVisible, setIsVisible, setPatients, patients }: { isVisible: boolean, setIsVisible: any, setPatients: any, patients: any }) => {
+const Form = ({
+  isVisible,
+  setIsVisible,
+  setPatients,
+  patients,
+}: {
+  isVisible: boolean;
+  setIsVisible: any;
+  setPatients: any;
+  patients: any;
+}) => {
   const [patient, setPatient] = useState('');
   const [owner, setOwner] = useState('');
   const [email, setEmail] = useState('');
   const [cellphone, setCellphone] = useState('');
   const [date, setDate] = useState(new Date());
   const [symptoms, setSymptoms] = useState('');
-  const [open, setOpen] = useState(false);
 
-  const handleNewAppointment = (e: any) => {
+  const handleNewAppointment = () => {
     if ([patient, owner, email, date, symptoms].includes('')) {
       // [{ text: 'Cancelar'}, {text: 'Ok'} ]
-      Alert.alert('Error', 'Todos los campos son obligatorios')
+      Alert.alert('Error', 'Todos los campos son obligatorios');
       return;
     }
 
@@ -38,8 +46,9 @@ const Form = ({ isVisible, setIsVisible, setPatients, patients }: { isVisible: b
       email,
       cellphone,
       date,
-      symptoms
-    }
+      symptoms,
+    };
+
     setPatients([...patients, newPatient]);
     setIsVisible(!isVisible);
     setPatient('');
@@ -48,7 +57,7 @@ const Form = ({ isVisible, setIsVisible, setPatients, patients }: { isVisible: b
     setCellphone('');
     setDate(new Date());
     setSymptoms('');
-  }
+  };
 
   return (
     <Modal visible={isVisible} animationType="slide">
@@ -58,7 +67,9 @@ const Form = ({ isVisible, setIsVisible, setPatients, patients }: { isVisible: b
             Nueva <Text style={styles.titleBold}>cita</Text>
           </Text>
 
-          <Pressable style={styles.btnCancel} onPress={() => setIsVisible(!isVisible)}>
+          <Pressable
+            style={styles.btnCancel}
+            onPress={() => setIsVisible(!isVisible)}>
             <Text style={styles.btnCancelText}>X cancelar</Text>
           </Pressable>
 
@@ -133,7 +144,9 @@ const Form = ({ isVisible, setIsVisible, setPatients, patients }: { isVisible: b
               numberOfLines={4}
             />
           </View>
-          <Pressable style={styles.btnNewAppointment} onPress={handleNewAppointment} >
+          <Pressable
+            style={styles.btnNewAppointment}
+            onPress={handleNewAppointment}>
             <Text style={styles.btnNewAppointmentText}>Agregar paciente</Text>
           </Pressable>
         </ScrollView>
@@ -187,7 +200,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#FFF'
+    borderColor: '#FFF',
   },
   btnCancelText: {
     color: '#FFF',

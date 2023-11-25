@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+/* eslint-disable prettier/prettier */
+import React, {useState} from 'react';
 import {
   Text,
-  View,
   StyleSheet,
   SafeAreaView,
-  Button,
   Pressable,
-  Modal,
-  FlatList
+  FlatList,
 } from 'react-native';
 import Form from './src/components/Form';
 import Patient from './src/components/Patient';
@@ -15,9 +13,11 @@ import Patient from './src/components/Patient';
 function App(): JSX.Element {
   const [isVisible, setIsVisible] = useState(false);
   const [patients, setPatients] = useState([]);
+  const [patient, setPatient] = useState({});
 
-  const addAppointment = () => {
-    console.log('diste click');
+  const patientToUpdate = (id: any) => {
+    const patientUpdate = patients.filter((patientElement: any) => patientElement?.id === id);
+    setPatient(patientUpdate[0]);
   };
 
   return (
@@ -33,18 +33,30 @@ function App(): JSX.Element {
         <Text style={styles.btnTextNewAppointment}>Nueva cita</Text>
       </Pressable>
 
-      {patients.length === 0 ?
-        <Text style={styles.noPatients}>No hay pacientes aun</Text> :
+      {patients.length === 0 ? (
+        <Text style={styles.noPatients}>No hay pacientes aun</Text>
+      ) : (
         <FlatList
-        style={styles.list}
+          style={styles.list}
           data={patients}
           keyExtractor={(item: any) => item.id}
-          renderItem={({ item }) => {
+          renderItem={({item}) => {
             return (
-              <Patient item={item}/>
-            )
-          }} />}
-      <Form isVisible={isVisible} setIsVisible={setIsVisible} setPatients={setPatients} patients={patients} />
+              <Patient
+                item={item}
+                setIsVisible={setIsVisible}
+                patientToUpdate={patientToUpdate}
+              />
+            );
+          }}
+        />
+      )}
+      <Form
+        isVisible={isVisible}
+        setIsVisible={setIsVisible}
+        setPatients={setPatients}
+        patients={patients}
+      />
     </SafeAreaView>
   );
 }
@@ -87,8 +99,8 @@ const styles = StyleSheet.create({
   },
   list: {
     marginTop: 50,
-    marginHorizontal: 30
-  }
+    marginHorizontal: 30,
+  },
 });
 
 export default App;
