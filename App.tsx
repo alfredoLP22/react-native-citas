@@ -56,6 +56,8 @@ function App(): JSX.Element {
         setIsVisible={setIsVisible}
         setPatients={setPatients}
         patients={patients}
+        patient={patient}
+        setPatient={setPatient}
       />
     </SafeAreaView>
   );

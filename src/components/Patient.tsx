@@ -29,7 +29,7 @@ const Patient = ({
   return (
     <View style={style.container}>
       <Text style={style.label}>Paciente:</Text>
-      <Text style={style.text}>{patient}</Text>
+      <Text style={style.text}>{patient} - {id}</Text>
       <Text style={style.date}>{formatDate(date)}</Text>
       <View style={style.containerButtons}>
         <Pressable

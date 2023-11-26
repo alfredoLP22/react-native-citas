@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Modal,
   SafeAreaView,
@@ -19,12 +19,17 @@ const Form = ({
   setIsVisible,
   setPatients,
   patients,
+  patient: patientObj,
+  setPatient: setPatientObj,
 }: {
   isVisible: boolean;
   setIsVisible: any;
   setPatients: any;
   patients: any;
+  patient: any;
+  setPatient: any;
 }) => {
+  const [id, setId] = useState('');
   const [patient, setPatient] = useState('');
   const [owner, setOwner] = useState('');
   const [email, setEmail] = useState('');
@@ -32,15 +37,26 @@ const Form = ({
   const [date, setDate] = useState(new Date());
   const [symptoms, setSymptoms] = useState('');
 
+  useEffect(() => {
+    console.log(patientObj);
+    if (Object.keys(patientObj).length > 0) {
+      setPatient(patientObj?.patient);
+      setOwner(patientObj?.owner);
+      setEmail(patientObj?.email);
+      setCellphone(patientObj?.cellphone);
+      setDate(patientObj?.date);
+      setSymptoms(patientObj?.symptoms);
+      setId(patientObj?.id);
+    }
+  }, [patientObj]);
+
   const handleNewAppointment = () => {
     if ([patient, owner, email, date, symptoms].includes('')) {
       // [{ text: 'Cancelar'}, {text: 'Ok'} ]
       Alert.alert('Error', 'Todos los campos son obligatorios');
       return;
     }
-
-    const newPatient = {
-      id: Date.now(),
+    const newPatient: any = {
       patient,
       owner,
       email,
@@ -49,7 +65,20 @@ const Form = ({
       symptoms,
     };
 
-    setPatients([...patients, newPatient]);
+    if (id) {
+      newPatient.id = id;
+      const patientUpdated = patients.map((patientState: any) =>
+        patientState.id === newPatient.id ? newPatient : patientState,
+      );
+
+      setPatients(patientUpdated);
+      setPatientObj({});
+    } else {
+      newPatient.id = Date.now();
+      setPatients([...patients, newPatient]);
+    }
+
+    setId('');
     setIsVisible(!isVisible);
     setPatient('');
     setOwner('');
@@ -64,12 +93,22 @@ const Form = ({
       <SafeAreaView style={styles.container}>
         <ScrollView>
           <Text style={styles.title}>
-            Nueva <Text style={styles.titleBold}>cita</Text>
+            {patientObj.id ? 'Editar' : 'Nueva'} <Text style={styles.titleBold}>cita</Text>
           </Text>
 
           <Pressable
             style={styles.btnCancel}
-            onPress={() => setIsVisible(!isVisible)}>
+            onPress={() => {
+              setIsVisible(!isVisible);
+              setPatientObj({});
+              setId('');
+              setPatient('');
+              setOwner('');
+              setEmail('');
+              setCellphone('');
+              setDate(new Date());
+              setSymptoms('');
+            }}>
             <Text style={styles.btnCancelText}>X cancelar</Text>
           </Pressable>
 
@@ -147,7 +186,7 @@ const Form = ({
           <Pressable
             style={styles.btnNewAppointment}
             onPress={handleNewAppointment}>
-            <Text style={styles.btnNewAppointmentText}>Agregar paciente</Text>
+            <Text style={styles.btnNewAppointmentText}>{patientObj.id ? 'Editar' : 'Agregar'} paciente</Text>
           </Pressable>
         </ScrollView>
       </SafeAreaView>
